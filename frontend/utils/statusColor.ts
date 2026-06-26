@@ -22,7 +22,6 @@ export const priorityColor: Record<TaskPriority, string> = {
 
 export const roleColor: Record<Role, string> = {
   [ROLES.OWNER]: 'bg-brand-100 text-brand-800 border-brand-200',
-  [ROLES.ADMIN]: 'bg-violet-100 text-violet-800 border-violet-200',
-  [ROLES.MEMBER]: 'bg-slate-100 text-slate-700 border-slate-200',
+  [ROLES.EDITOR]: 'bg-violet-100 text-violet-800 border-violet-200',
   [ROLES.VIEWER]: 'bg-slate-50 text-slate-600 border-slate-200',
 };

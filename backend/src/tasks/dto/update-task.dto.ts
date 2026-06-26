@@ -1,4 +1,4 @@
-import { IsEnum, IsISO8601, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsIn, IsISO8601, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { TASK_PRIORITY_VALUES, TASK_STATUS_VALUES, type TaskPriority, type TaskStatus } from '../../common/constants/status.constant';
 
 export class UpdateTaskDto {
@@ -14,11 +14,11 @@ export class UpdateTaskDto {
   description?: string;
 
   @IsOptional()
-  @IsEnum(TASK_STATUS_VALUES)
+  @IsIn(TASK_STATUS_VALUES)
   status?: TaskStatus;
 
   @IsOptional()
-  @IsEnum(TASK_PRIORITY_VALUES)
+  @IsIn(TASK_PRIORITY_VALUES)
   priority?: TaskPriority;
 
   @IsOptional()

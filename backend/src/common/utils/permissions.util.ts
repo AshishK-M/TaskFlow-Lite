@@ -1,28 +1,38 @@
 import { ROLES, type Role } from '../constants/roles.constant';
 
-export type PermissionContext = {
-  role: Role | null;
-  isOwner?: boolean; // true when the actor created the resource (e.g. task author)
-};
-
-const isPriviledged = (role: Role | null): boolean =>
-  role === ROLES.OWNER || role === ROLES.ADMIN;
-
+/**
+ * The single source of truth for what each role is allowed to do on a board.
+ * Every controller / service that needs to gate an action calls one of these
+ * helpers — there are no ad-hoc role comparisons elsewhere in the codebase.
+ *
+ * Permission matrix (assignment requirement):
+ *   | Action          | OWNER | EDITOR | VIEWER |
+ *   | View board      |   ✅   |   ✅   |   ✅   |
+ *   | View tasks      |   ✅   |   ✅   |   ✅   |
+ *   | Create task     |   ✅   |   ✅   |   ❌   |
+ *   | Update task     |   ✅   |   ✅   |   ❌   |
+ *   | Delete task     |   ✅   |   ✅   |   ❌   |
+ *   | Manage members  |   ✅   |   ❌   |   ❌   |
+ *   | Update board    |   ✅   |   ❌   |   ❌   |
+ *   | Delete board    |   ✅   |   ❌   |   ❌   |
+ */
 export const Permissions = {
-  canRead: ({ role }: PermissionContext): boolean => role !== null,
+  canViewBoard: (role: Role | null): boolean => role !== null,
 
-  canCreateTask: ({ role }: PermissionContext): boolean =>
-    role !== null && role !== ROLES.VIEWER,
+  canViewTask: (role: Role | null): boolean => role !== null,
 
-  canUpdateTask: ({ role, isOwner }: PermissionContext): boolean =>
-    isPriviledged(role) || (role === ROLES.MEMBER && !!isOwner),
+  canCreateTask: (role: Role | null): boolean =>
+    role === ROLES.OWNER || role === ROLES.EDITOR,
 
-  canDeleteTask: ({ role, isOwner }: PermissionContext): boolean =>
-    isPriviledged(role) || (role === ROLES.MEMBER && !!isOwner),
+  canUpdateTask: (role: Role | null): boolean =>
+    role === ROLES.OWNER || role === ROLES.EDITOR,
 
-  canManageMembers: ({ role }: PermissionContext): boolean => isPriviledged(role),
+  canDeleteTask: (role: Role | null): boolean =>
+    role === ROLES.OWNER || role === ROLES.EDITOR,
 
-  canUpdateBoard: ({ role }: PermissionContext): boolean => isPriviledged(role),
+  canManageMembers: (role: Role | null): boolean => role === ROLES.OWNER,
 
-  canDeleteBoard: ({ role }: PermissionContext): boolean => role === ROLES.OWNER,
+  canUpdateBoard: (role: Role | null): boolean => role === ROLES.OWNER,
+
+  canDeleteBoard: (role: Role | null): boolean => role === ROLES.OWNER,
 };

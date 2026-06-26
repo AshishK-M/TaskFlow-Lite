@@ -7,7 +7,7 @@ const SEED_PASSWORD = 'password123';
 
 const users = [
   { email: 'alice@example.com', name: 'Alice (owner)' },
-  { email: 'bob@example.com', name: 'Bob (member)' },
+  { email: 'bob@example.com', name: 'Bob (editor)' },
   { email: 'carol@example.com', name: 'Carol (viewer)' },
 ];
 
@@ -35,7 +35,7 @@ const main = async () => {
       members: {
         create: [
           { userId: alice.id, role: 'OWNER' },
-          { userId: bob.id, role: 'MEMBER' },
+          { userId: bob.id, role: 'EDITOR' },
           { userId: carol.id, role: 'VIEWER' },
         ],
       },

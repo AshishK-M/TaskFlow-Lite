@@ -30,7 +30,7 @@ export class MembersService {
 
   async add(boardId: string, actorId: string, dto: AddMemberDto) {
     const role = await this.membership.resolveRole(boardId, actorId);
-    if (!Permissions.canManageMembers({ role })) {
+    if (!Permissions.canManageMembers(role)) {
       throw new ForbiddenException('You cannot manage members of this board');
     }
 
@@ -50,7 +50,7 @@ export class MembersService {
 
   async updateRole(boardId: string, memberId: string, actorId: string, dto: UpdateMemberDto) {
     const role = await this.membership.resolveRole(boardId, actorId);
-    if (!Permissions.canManageMembers({ role })) {
+    if (!Permissions.canManageMembers(role)) {
       throw new ForbiddenException('You cannot manage members of this board');
     }
     const target = await this.requireMember(boardId, memberId);
@@ -66,7 +66,7 @@ export class MembersService {
 
   async remove(boardId: string, memberId: string, actorId: string) {
     const role = await this.membership.resolveRole(boardId, actorId);
-    if (!Permissions.canManageMembers({ role })) {
+    if (!Permissions.canManageMembers(role)) {
       throw new ForbiddenException('You cannot manage members of this board');
     }
     const target = await this.requireMember(boardId, memberId);

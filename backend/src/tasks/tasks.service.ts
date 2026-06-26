@@ -28,7 +28,7 @@ export class TasksService {
 
   async create(boardId: string, userId: string, dto: CreateTaskDto) {
     const role = await this.membership.resolveRole(boardId, userId);
-    if (!Permissions.canCreateTask({ role })) {
+    if (!Permissions.canCreateTask(role)) {
       throw new ForbiddenException('You cannot create tasks on this board');
     }
     await this.assertAssignableMember(boardId, dto.assigneeId ?? null);
@@ -49,9 +49,9 @@ export class TasksService {
   }
 
   async update(boardId: string, taskId: string, userId: string, dto: UpdateTaskDto) {
-    const task = await this.getTaskInBoard(boardId, taskId);
+    await this.getTaskInBoard(boardId, taskId);
     const role = await this.membership.resolveRole(boardId, userId);
-    if (!Permissions.canUpdateTask({ role, isOwner: task.createdById === userId })) {
+    if (!Permissions.canUpdateTask(role)) {
       throw new ForbiddenException('You cannot update this task');
     }
     if (dto.assigneeId !== undefined) {
@@ -74,9 +74,9 @@ export class TasksService {
   }
 
   async remove(boardId: string, taskId: string, userId: string) {
-    const task = await this.getTaskInBoard(boardId, taskId);
+    await this.getTaskInBoard(boardId, taskId);
     const role = await this.membership.resolveRole(boardId, userId);
-    if (!Permissions.canDeleteTask({ role, isOwner: task.createdById === userId })) {
+    if (!Permissions.canDeleteTask(role)) {
       throw new ForbiddenException('You cannot delete this task');
     }
     await this.prisma.task.delete({ where: { id: taskId } });

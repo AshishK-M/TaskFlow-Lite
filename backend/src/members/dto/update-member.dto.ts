@@ -1,7 +1,7 @@
-import { IsEnum } from 'class-validator';
+import { IsIn } from 'class-validator';
 import { ASSIGNABLE_ROLES, type Role } from '../../common/constants/roles.constant';
 
 export class UpdateMemberDto {
-  @IsEnum(ASSIGNABLE_ROLES)
+  @IsIn(ASSIGNABLE_ROLES)
   role!: Role;
 }

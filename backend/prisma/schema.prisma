@@ -40,7 +40,7 @@ model BoardMember {
   id        String   @id @default(cuid())
   boardId   String
   userId    String
-  role      String   // OWNER | ADMIN | MEMBER | VIEWER
+  role      String   // OWNER | EDITOR | VIEWER
   createdAt DateTime @default(now())
 
   board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)

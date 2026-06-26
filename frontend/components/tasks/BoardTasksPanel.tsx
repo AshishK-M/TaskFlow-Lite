@@ -9,7 +9,6 @@ import { SkeletonCard } from '@/components/ui/Skeleton';
 import { TASK_STATUS, TASK_STATUS_VALUES, type TaskStatus } from '@/constants/status';
 import { MESSAGES } from '@/constants/messages';
 import type { Role } from '@/constants/roles';
-import { useAuth } from '@/hooks/useAuth';
 import { useApiAction } from '@/hooks/useApiErrorToast';
 import { useModal } from '@/hooks/useModal';
 import { usePermissions } from '@/hooks/usePermissions';
@@ -39,7 +38,6 @@ export type BoardTasksPanelProps = {
 };
 
 export const BoardTasksPanel = ({ boardId, role, members }: BoardTasksPanelProps) => {
-  const { user } = useAuth();
   const { data, loading, error, refetch, create, update, remove, moveTask } = useTasks(boardId);
   const action = useApiAction();
   const can = usePermissions(role);
@@ -90,25 +88,25 @@ export const BoardTasksPanel = ({ boardId, role, members }: BoardTasksPanelProps
       );
     }
     const filtered = data.filter((t) => visibleStatuses.has(t.status));
+    const canEdit = can.updateTask();
+    const canDelete = can.deleteTask();
     return (
       <TaskBoard
         tasks={filtered}
         visibleStatuses={visibleStatuses}
         cardProps={{
           onEdit: (task) => {
-            if (can.updateTask({ isOwner: task.createdById === user?.id })) editModal.show(task);
+            if (canEdit) editModal.show(task);
           },
           onDelete: (task) => {
-            if (can.deleteTask({ isOwner: task.createdById === user?.id })) deleteModal.show(task);
+            if (canDelete) deleteModal.show(task);
           },
           onMove: (task, status) => {
-            if (can.updateTask({ isOwner: task.createdById === user?.id })) {
-              void handleMove(task, status);
-            }
+            if (canEdit) void handleMove(task, status);
           },
-          canEdit: (task) => can.updateTask({ isOwner: task.createdById === user?.id }),
-          canDelete: (task) => can.deleteTask({ isOwner: task.createdById === user?.id }),
-          canMove: (task) => can.updateTask({ isOwner: task.createdById === user?.id }),
+          canEdit: () => canEdit,
+          canDelete: () => canDelete,
+          canMove: () => canEdit,
         }}
       />
     );

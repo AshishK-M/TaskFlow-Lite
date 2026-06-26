@@ -30,7 +30,7 @@ export const AddMemberModal = ({ open, onClose, existingMembers, onAdd }: AddMem
   const [results, setResults] = useState<User[]>([]);
   const [searching, setSearching] = useState(false);
   const [selected, setSelected] = useState<User | null>(null);
-  const [role, setRole] = useState<Role>(ROLES.MEMBER);
+  const [role, setRole] = useState<Role>(ROLES.EDITOR);
   const [submitting, setSubmitting] = useState(false);
 
   // Reset whenever the modal is reopened
@@ -39,7 +39,7 @@ export const AddMemberModal = ({ open, onClose, existingMembers, onAdd }: AddMem
       setQuery('');
       setResults([]);
       setSelected(null);
-      setRole(ROLES.MEMBER);
+      setRole(ROLES.EDITOR);
     }
   }, [open]);
 

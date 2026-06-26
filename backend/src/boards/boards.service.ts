@@ -66,7 +66,7 @@ export class BoardsService {
 
   async update(boardId: string, userId: string, dto: UpdateBoardDto) {
     const role = await this.membership.resolveRole(boardId, userId);
-    if (!Permissions.canUpdateBoard({ role })) {
+    if (!Permissions.canUpdateBoard(role)) {
       throw new ForbiddenException('You cannot update this board');
     }
     return this.prisma.board.update({
@@ -81,7 +81,7 @@ export class BoardsService {
 
   async remove(boardId: string, userId: string) {
     const role = await this.membership.resolveRole(boardId, userId);
-    if (!Permissions.canDeleteBoard({ role })) {
+    if (!Permissions.canDeleteBoard(role)) {
       throw new ForbiddenException('Only the owner can delete a board');
     }
     await this.prisma.board.delete({ where: { id: boardId } });

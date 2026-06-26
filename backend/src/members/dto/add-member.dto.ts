@@ -1,10 +1,10 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsIn, IsString } from 'class-validator';
 import { ASSIGNABLE_ROLES, type Role } from '../../common/constants/roles.constant';
 
 export class AddMemberDto {
   @IsString()
   userId!: string;
 
-  @IsEnum(ASSIGNABLE_ROLES)
+  @IsIn(ASSIGNABLE_ROLES)
   role!: Role;
 }
