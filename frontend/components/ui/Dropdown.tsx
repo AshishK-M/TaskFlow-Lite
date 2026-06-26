@@ -37,7 +37,7 @@ export const Dropdown = ({ trigger, items, align = 'right' }: DropdownProps) => 
       {open && (
         <div
           className={cn(
-            'absolute z-20 mt-1 min-w-[10rem] rounded-md border border-slate-200 bg-white shadow-lg py-1',
+            'absolute z-20 mt-1 min-w-[10rem] rounded-md border border-slate-200 bg-white shadow-lg py-1 left-0 w-fit',
             align === 'right' ? 'right-0' : 'left-0',
           )}
         >
